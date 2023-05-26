@@ -1,0 +1,126 @@
+product_id,product_weight_g,product_length_cm,product_height_cm,product_width_cm,product_category_name_english,product_name
+1e9e8ef04dbcff4541ed26657ea517e5,225,16,10,14,perfumery,Acqua di Gio by Giorgio Armani
+6a2fb4dd53d2cdb88e0432f1284a004c,400,27,5,20,perfumery,Alien by Thierry Mugler
+0d009643171aee696f4733340bc2fdd0,422,21,16,18,perfumery,Black Opium by Yves Saint Laurent
+b1eae565a61935e0011ee7682fef9dc9,267,17,13,17,perfumery,Bleu de Chanel by Chanel
+8da90b37f0fb171b4877c124f965b1f6,377,18,13,15,perfumery,Bright Crystal by Versace
+828fe032935d7c1901682e5b6cc076c2,600,20,20,20,perfumery,Candy by Prada
+bbaef2eadf31fe3ea6702077398be06c,400,18,11,11,perfumery,Chance by Chanel
+cd7701670288642f7be9437dec9034c1,400,16,20,15,perfumery,CK One by Calvin Klein
+dc582e9ac5036846acfeeb3093b17aa7,1300,22,14,14,perfumery,Coco Mademoiselle by Chanel
+1f64ec386a6be322e71596931f5d2377,200,16,22,11,perfumery,Daisy by Marc Jacobs
+28e410092e56a080e14595c053d0bbe8,200,16,16,16,perfumery,Eau de Rochas by Rochas
+3488d2ce36e718097c1509444289ef7f,514,18,12,15,perfumery,Flowerbomb by Viktor & Rolf
+ff7ac89ca5b77d0fb5f8a65262d73956,1000,20,14,13,perfumery,Good Girl by Carolina Herrera
+7715f7da32957a84ad267799121a90e2,350,16,11,11,perfumery,Green Irish Tweed by Creed
+f159439c5c382fae366d444e05c590c1,400,18,18,12,perfumery,Gucci Bloom by Gucci
+2ae501b303a5a8e6f75c8c36f366b2d5,150,22,7,16,perfumery,Happy by Clinique
+c51dc74a8b5018e82e9e44ef4b647227,650,16,10,11,perfumery,Hypnotic Poison by Christian Dior
+c20fbbd4ccf2f7da70e150689a6a905f,455,21,15,17,perfumery,Infusion d'Iris by Prada
+e792f2bb275bdea9b6076c2acbb5abcd,850,16,14,11,perfumery,J'adore by Christian Dior
+2d6676e04aac85ce66dcf8d0529f4012,500,20,12,15,perfumery,Joy by Christian Dior
+da86f2cc2faf840b7b86390726b88905,200,22,3,11,perfumery,La Vie est Belle by Lancôme
+99d1f27bf9ea0392ab69d0203c6efdc4,150,16,16,15,perfumery,Light Blue by Dolce & Gabbana
+5773723f7819ffb88c5c758f8f8c183c,700,20,20,20,perfumery,L'Interdit by Givenchy
+a1766f2d27b4e90a0d78d8e115295399,450,16,16,22,perfumery,Love Story by Chloé
+1175dc374bce5c9d93c4d4281d8d85d7,400,18,18,18,perfumery,Miracle by Lancôme
+cef67bcfe19066a932b7673e239eb23d,371,26,4,26,baby,Graco Pack 'n Play Playard
+03b63c5fc16691530586ae020c345514,7150,50,19,45,baby,Fisher-Price Infant-to-Toddler Rocker
+8b41fbc2b984a12030090112324d1bc4,500,20,13,13,baby,Baby Einstein 5-in-1 Journey of Discovery Activity Gym
+5370b82a213393979691c98074265584,7950,33,30,44,baby,Summer Infant Pop N' Jump Portable Activity Center
+b864b103180d5a6a3f830e67f93e8735,600,70,11,11,baby,Munchkin Portable Diaper Caddy
+3fcd8dfe610c62edfb51de2630cd9ef4,5700,41,17,49,baby,Philips Avent Anti-Colic Baby Bottle
+c18c01e09509a509e2b88d3ed40c580e,2150,42,25,15,baby,Dr. Brown's Original Bottle Newborn Feeding Set
+60cf4effb6947283fa638d570bd07318,4500,80,70,28,baby,Medela Sonata Smart Breast Pump
+3cef8174403f4fdedbf24fa67fa9f132,1800,18,32,27,baby,Spectra S1 Plus Electric Breast Pump
+8bb6ace4cf2411747ea1cfecad5a458d,6000,75,15,50,baby,FridaBaby NoseFrida The Snotsucker
+6e9c52b407fea24064f7ab2b144fbf8c,13575,71,81,44,baby,Hatch Baby Rest Sound Machine
+9181a16945ef449aa81212d5139945ec,6950,85,11,50,baby,4moms mamaRoo 4 Baby Swing
+302a19dacdbb5ed2f74f9dee8126ef79,300,17,7,24,baby,Baby Delight Beside Me Dreamer Bassinet & Bedside Sleeper
+622d3b263cd40b06e1eeea144fb83f19,250,21,4,13,baby,Boppy Original Nursing Pillow and Positioner
+115bc0865dc675638645e1ab5311e30c,850,42,25,15,baby,Skip Hop Moby Bath Spout Cover
+4ed86bcb86407328452ac1c5b3b89d67,500,30,8,35,baby,Infantino Flip 4-in-1 Convertible Carrier
+a77e6c93242ae050800cb3e5b98c2fcd,8300,45,25,45,baby,Ergobaby 360 All-Position Baby Carrier
+f2d80346f1dd6986e9e6611db7b708aa,50,16,2,11,baby,Baby Trend Expedition Jogger Stroller
+09c3d39641970009c198caed304ccfc4,300,68,7,13,baby,Chicco Bravo Trio Travel System
+b5d214651360e2d58e13b48ae69c6199,10400,100,23,27,baby,UPPAbaby Vista V2 Stroller
+fc37e09bb4dadd1eef5e92e954b1c72e,500,30,6,23,baby,Joovy Spoon Walker
+f3979f97b4913d696bbe9c7c425c5e4e,18667,88,28,67,baby,Fisher-Price Rainforest Jumperoo
+bfd9a39f1774d4ca8773f1f42f09d187,750,50,5,40,baby,Skip Hop Explore and More Baby's View 3-Stage Activity Center
+375478581c97832540b9209722a32058,17600,65,36,45,baby,Burt's Bees Baby Organic Cotton Bodysuits
+fc5c33cddd49638580cfe9fec90aa943,300,16,8,11,baby,aden + anais Classic Swaddle Blankets
+a1b71017a84f92fd8da4aeefba108a24,900,40,15,20,computers_accessories,Logitech MX Master 3 Wireless Mouse
+c78b767da00efb70c1bcccab87c28cd5,300,42,2,30,computers_accessories,Razer Huntsman Elite Gaming Keyboard
+a0253d43394dd4da9a5d7b1f546f1a32,740,23,13,13,computers_accessories,Samsung T7 Portable SSD - 1TB
+c478b1bbf9ec8c5691f37ccb83187386,300,25,8,18,computers_accessories,SanDisk Ultra Flair USB 3.0 Flash Drive - 128GB
+a2e2851eae0aebb8ee4df32348b42e2b,367,16,4,11,computers_accessories,Logitech C922 Pro Stream Webcam
+dbb399a8be7395d5b136d49fcdce13df,200,23,9,13,computers_accessories,Bose QuietComfort 35 II Wireless Headphones
+8e71b24c3e25a92fef6176120a67fac7,783,21,13,28,computers_accessories,Anker 4-Port USB 3.0 Hub
+21db47f6493b06e8e7fc562ec9890e77,300,35,5,25,computers_accessories,Kootek Laptop Cooling Pad
+9e48435521202c8795e21ac42efcc761,600,46,3,15,computers_accessories,SteelSeries QcK Gaming Surface - XL RGB Prism Edition
+a1bf559ac1eab015ba992bd76d9d76c7,200,39,2,30,computers_accessories,AmazonBasics Metal Monitor Stand
+d68bd4dedccc5545b1ff6629de8fb021,1950,17,11,12,computers_accessories,Logitech R500 Laser Presentation Remote
+2e511b5741ab14e7f5294df6f1310b03,188,20,16,15,computers_accessories,Avantree DG60 Bluetooth 5.0 USB Audio Adapter
+599e5320aef0c7dd9e3fed9b2f673d41,700,20,20,20,computers_accessories,AmazonBasics RJ45 Cat-6 Ethernet Patch Cable - 25 Feet
+c72a1a8c3bbe15206d1880cedc7bd791,4750,18,22,30,computers_accessories,AmazonBasics High-Speed HDMI Cable - 6 Feet
+c23381297fa734ea441a15d723199fb5,200,20,20,20,computers_accessories,AmazonBasics DVI to DVI Cable - 6 Feet
+8b6a57fbcf171e0a44f97af7af858939,617,17,14,17,computers_accessories,AmazonBasics VGA to VGA Cable - 6 Feet
+e791e580a2421e4471aebb0629c705c1,200,16,4,14,computers_accessories,AmazonBasics DisplayPort to DisplayPort Cable - 6 Feet
+a4944a8b60acfe399f15f45892bc5639,667,27,19,20,computers_accessories,AmazonBasics USB 3.0 Extension Cable - 6 Feet
+47de5f36ace720b578ca1b30d0b45b8d,900,26,13,21,computers_accessories,Blue Yeti USB Mic for Recording & Streaming
+7486c1fa8968fae4af4c32882f72dbe6,150,16,4,14,computers_accessories,Anker PowerCore 10000 Portable Charger
+3931aaf38ba4cc928100541ff51b82ff,400,16,4,16,computers_accessories,Kuzy Keyboard Cover for MacBook Pro
+2b1e141d70cf9e03eae19784eb427c24,400,16,21,15,computers_accessories,amFilm Tempered Glass Screen Protector for MacBook Pro
+dfc767a34d7f9f8ee72a3e9b5ed55f89,400,38,2,29,computers_accessories,iKlear Apple Polish Cleaning Kit
+a963ea4d494221de09b70f1b4a70edbd,150,35,8,11,computers_accessories,Incase ICON Sleeve for MacBook Pro
+483df9288035696f34225a7047591d13,550,26,17,17,computers_accessories,Belkin 6-Outlet Power Strip
+30e77af9e7759bbaa0305d2fbc605dc4,2000,32,12,37,fashion_shoes,Adidas Superstar
+a04cf12934a318be6550b1aeab938bf2,4000,57,14,36,fashion_shoes,Nike Air Force 1
+5cfe07a11fd4f35d3c5ca21cd60cee6e,750,22,12,33,fashion_shoes,Converse Chuck Taylor All Star
+e8f22df5fa5b454907286aa61d6216a8,1500,22,12,33,fashion_shoes,Vans Old Skool
+5e459bd31247ee46fa95b09556600a6a,300,29,7,16,fashion_shoes,Reebok Classic Leather
+20ee98f10c16f05a43db060ab1cbfd7e,100,29,7,16,fashion_shoes,Puma Suede Classic
+7e3c3f51d5ccc2382147194f911e22a8,700,16,8,18,fashion_shoes,New Balance 990v5
+f45d3b91af1103db9a21dc9d11cb9223,750,22,12,33,fashion_shoes,Fila Disruptor II
+cfe99a31516679fb9515881d25891570,500,29,12,23,fashion_shoes,Dr. Martens 1460
+2a21592fa9b5f82a36ec4e151bb31d10,500,29,7,16,fashion_shoes,Timberland 6-Inch Premium Waterproof Boot
+7fb3f37949847dce3f2a1b81d4445f55,300,29,7,16,fashion_shoes,UGG Classic Short II
+2e8eb076261eb842a7e1bdf64e1facda,1400,22,12,33,fashion_shoes,Skechers D'Lites
+03e7d29d9988a30815f1f20b6549881f,700,22,12,33,fashion_shoes,Crocs Classic Clog
+7eb9c68704af5effea1cee6f3a6b4b4b,900,22,12,33,fashion_shoes,Birkenstock Arizona
+dfb68ce52d4975e692909a1bf9d59f1b,300,29,7,16,fashion_shoes,Teva Original Universal
+d75e2e75d4471019ee14ae21d5f61704,900,20,9,21,fashion_shoes,Clarks Desert Boot
+b81399b264f3f525f6645f98369b1868,2800,41,12,34,fashion_shoes,Sperry Top-Sider Authentic Original Boat Shoe
+a07713fa6def350398642fcb700db2f9,1400,22,12,33,fashion_shoes,Steve Madden Irenee Sandal
+062e425d963f3eac04709162c3ce6782,450,25,15,35,fashion_shoes,Adidas Adilette
+483bc1cbabb3fd0c16d82d2f162852c4,2000,32,12,37,fashion_shoes,Nike Benassi JDI
+fe6614ba400caca2d8d310902d5ecdd5,1500,22,12,33,fashion_shoes,Gucci Ace Sneaker
+76f71ec385ad031b06d5ad8be0440260,1200,20,9,21,fashion_shoes,Balenciaga Triple S Trainer
+50a2c8c64d432c1d4921f2e63e6c5e70,1400,22,12,33,fashion_shoes,Prada Cloudbust Thunder Sneaker
+69e3a7b303638194dc5edd5e6abff8ff,400,29,7,16,fashion_shoes,Christian Louboutin Red Bottoms
+f01058850701fcb9d8f652660012b9ec,450,29,10,22,fashion_shoes,Yeezy Boost 350 V2
+3e9b58f1436820c248d3f98d7229bb14,250,16,11,11,watches_gifts,Apple Watch Series 7
+be1be330cf34043d1c40d6114cbd11b5,317,19,13,16,watches_gifts,Rolex Submariner
+ce94e3c41145e28428cdae952a1fd7f2,335,17,11,12,watches_gifts,Omega Seamaster
+723f62c36c298037716bf60c0ad0df3a,250,16,2,11,watches_gifts,Tag Heuer Carrera
+87fb220044e9aca16fbec51c6c997aa0,250,20,12,20,watches_gifts,Breitling Navitimer
+e0bbe6292471ff5ab3752414baf78111,500,16,11,11,watches_gifts,Tudor Black Bay
+a1b3a75aaaee5c9a683f2266c088f720,350,16,11,11,watches_gifts,Cartier Tank
+5e21d5cab5d33e770d8150a4ee6117db,200,16,2,11,watches_gifts,Patek Philippe Nautilus
+80fc21f90a43fdcfc623f11f5457db10,267,17,11,12,watches_gifts,Jaeger-LeCoultre Reverso
+d801448d8cf48fd15a66dc8779d47241,267,17,11,13,watches_gifts,Audemars Piguet Royal Oak
+b6b4ab44d1f3c2a645abbda76af2a993,1050,30,45,11,watches_gifts,IWC Portugieser
+d294bd539d8c70342149beb38b767afc,650,13,11,12,watches_gifts,Panerai Luminor
+457c5f8a59156ce6315753d8d788a16a,200,16,2,11,watches_gifts,Breguet Classique
+f14aa2ba817ef24ccf7f99c0ccfab59a,263,18,15,16,watches_gifts,Blancpain Fifty Fathoms
+76fffd0056ad48fbddac939c05e05cff,200,16,2,20,watches_gifts,Hublot Big Bang
+d899300bb0834fde956e80ce7ca0c958,350,19,13,13,watches_gifts,Zenith El Primero
+28f71b48a5f99f0bcf4642ae10352557,500,17,22,17,watches_gifts,Nomos Glashutte Tangente
+ba17dd83b93da33a4483ba301644f40a,250,16,2,11,watches_gifts,Seiko SKX007
+4e80e5fbd1f7a5e67501d0e1573abf98,300,19,13,13,watches_gifts,Citizen Eco-Drive
+5b706747080dcd34b3ebd803c25ccd65,340,47,13,13,watches_gifts,Hamilton Khaki Field
+91e6a181c1ebe734ab459822cee89763,850,48,16,25,watches_gifts,Tissot T-Touch
+af8215adef2df1e9e66642f159e81e55,400,20,11,19,watches_gifts,Casio G-Shock
+35255921c732e0e9319097469d856cd5,400,18,11,15,watches_gifts,Timex Weekender
+25a675783383c8e0aa707b7e9063c925,253,18,11,13,watches_gifts,Fossil Grant
+ba3fea9ec13fb882dda6c9e4295d9130,667,20,17,18,watches_gifts,Michael Kors Runway
