@@ -1,0 +1,2 @@
+- Files stored in the Formatted Zone (PostgreSQL)
+- Script to load from Persistent Zone to Formatted Zone (Apache Spark)
