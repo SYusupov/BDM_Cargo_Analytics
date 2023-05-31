@@ -1,12 +1,6 @@
 import psycopg2
 from neo4j import GraphDatabase
-
-airport_to_city = {
-    "Madrid" : "MAD",
-    "Barcelona" : "BCN",
-    "Málaga" : "AGP",
-    "Palma" : "PMI"
-}
+from datetime import datetime
 
 def connect_postgres():
     conn = psycopg2.connect(
@@ -36,9 +30,9 @@ def fetch_data_from_postgres(conn):
     return users, travels, requests, products
 
 def transform_data(users, travels, requests, products):
-    user_nodes = [{'user_id': row[0], 'is_traveller': row[1], 'city': airport_to_city.get(row[2], row[2])} for row in users]
-    travel_nodes = [{'userId': row[0], 'departureAirportFsCode': row[1], 'arrivalAirportFsCode': row[2], 'departureTime': row[3], 'arrivalTime': row[4], 'extraLuggage': row[5]} for row in travels]
-    request_nodes = [{'initializationUserId': row[0], 'collectionUserId': row[1], 'travellerId': row[2], 'productId': row[3], 'dateToDeliver': row[4], 'dateDelivered': row[5], 'requestDate': row[6]} for row in requests]
+    user_nodes = [{'user_id': row[0], 'is_traveller': row[1], 'city': row[2]} for row in users]
+    travel_nodes = [{'userId': row[0], 'departureAirportFsCode': row[1], 'arrivalAirportFsCode': row[2], 'departureTime': datetime.strptime(row[3], '%Y-%m-%d %H:%M:%S'), 'arrivalTime': datetime.strptime(row[4], '%Y-%m-%d %H:%M:%S'), 'extraLuggage': row[5]} for row in travels]
+    request_nodes = [{'initializationUserId': row[0], 'collectionUserId': row[1], 'travellerId': row[2], 'productId': row[3], 'dateToDeliver': datetime.strptime(row[4], '%m/%d/%Y %I:%M %p'), 'dateDelivered': None if row[5] is None else datetime.strptime(row[5], '%m/%d/%Y %I:%M %p'), 'requestDate': datetime.strptime(row[6], '%m/%d/%Y %I:%M %p')} for row in requests]
     product_nodes = [{'product_id': row[0], 'product_weight_g': row[1], 'product_category_name_english': row[2], 'product_name': row[3]} for row in products]
 
     return user_nodes, travel_nodes, request_nodes, product_nodes
