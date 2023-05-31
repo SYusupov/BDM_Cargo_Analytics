@@ -1,5 +1,6 @@
 import psycopg2
 from neo4j import GraphDatabase
+from datetime import datetime
 
 def connect_postgres():
     conn = psycopg2.connect(
@@ -14,25 +15,25 @@ def connect_postgres():
 def fetch_data_from_postgres(conn):
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM users")
+    cur.execute("SELECT user_id, is_traveller, city FROM users")
     users = cur.fetchall()
 
-    cur.execute("SELECT * FROM travels")
+    cur.execute("SELECT userId, departureAirportFsCode, arrivalAirportFsCode, departureTime, arrivalTime, extraLuggage FROM travels")
     travels = cur.fetchall()
 
-    cur.execute("SELECT * FROM requests")
+    cur.execute("SELECT initializationUserId, collectionUserId, travellerId, productId, dateToDeliver, dateDelivered, requestDate FROM requests")
     requests = cur.fetchall()
 
-    cur.execute("SELECT * FROM products")
+    cur.execute("SELECT product_id, product_weight_g, product_category_name_english, product_name FROM products")
     products = cur.fetchall()
 
     return users, travels, requests, products
 
 def transform_data(users, travels, requests, products):
-    user_nodes = [{'user_id': row[0], 'gender': row[1], 'nationality': row[2], 'dob': row[3], 'is_traveller': row[4]} for row in users]
-    travel_nodes = [{'userId': row[0], 'departureAirportFsCode': row[1], 'arrivalAirportFsCode': row[2]} for row in travels]
-    request_nodes = [{'initializationUserId': row[0], 'collectionUserId': row[1], 'productId': row[3]} for row in requests]
-    product_nodes = [{'product_id': row[0]} for row in products]
+    user_nodes = [{'user_id': row[0], 'is_traveller': row[1], 'city': row[2]} for row in users]
+    travel_nodes = [{'userId': row[0], 'departureAirportFsCode': row[1], 'arrivalAirportFsCode': row[2], 'departureTime': datetime.strptime(row[3], '%Y-%m-%d %H:%M:%S'), 'arrivalTime': datetime.strptime(row[4], '%Y-%m-%d %H:%M:%S'), 'extraLuggage': row[5]} for row in travels]
+    request_nodes = [{'initializationUserId': row[0], 'collectionUserId': row[1], 'travellerId': row[2], 'productId': row[3], 'dateToDeliver': datetime.strptime(row[4], '%m/%d/%Y %I:%M %p'), 'dateDelivered': None if row[5] is None else datetime.strptime(row[5], '%m/%d/%Y %I:%M %p'), 'requestDate': datetime.strptime(row[6], '%m/%d/%Y %I:%M %p')} for row in requests]
+    product_nodes = [{'product_id': row[0], 'product_weight_g': row[1], 'product_category_name_english': row[2], 'product_name': row[3]} for row in products]
 
     return user_nodes, travel_nodes, request_nodes, product_nodes
 
@@ -44,11 +45,11 @@ def connect_neo4j():
 def import_data_to_neo4j(driver, user_nodes, travel_nodes, request_nodes, product_nodes):
     with driver.session() as session:
         for node in user_nodes:
-            session.run("CREATE (:User {user_id: $user_id, gender: $gender, nationality: $nationality, dob: $dob, is_traveller: $is_traveller})", node)
-        
+            session.run("CREATE (:User {user_id: $user_id, is_traveller: $is_traveller, city: $city})", node)
+
         for node in travel_nodes:
             session.run("""
-            CREATE (t:Travel {departureAirportFsCode: $departureAirportFsCode, arrivalAirportFsCode: $arrivalAirportFsCode})
+            CREATE (t:Travel {departureAirportFsCode: $departureAirportFsCode, arrivalAirportFsCode: $arrivalAirportFsCode, departureTime: $departureTime, arrivalTime: $arrivalTime, extraLuggage: $extraLuggage})
             WITH t
             MATCH (u:User {user_id: $userId})
             CREATE (u)-[:MAKES]->(t)
@@ -56,17 +57,19 @@ def import_data_to_neo4j(driver, user_nodes, travel_nodes, request_nodes, produc
         
         for node in request_nodes:
             session.run("""
-            CREATE (r:Request {initializationUserId: $initializationUserId, collectionUserId: $collectionUserId, productId: $productId})
+            CREATE (r:Request {initializationUserId: $initializationUserId, collectionUserId: $collectionUserId, travellerId: $travellerId, productId: $productId, dateToDeliver: $dateToDeliver, dateDelivered: $dateDelivered, requestDate: $requestDate})
             WITH r
             MATCH (iu:User {user_id: $initializationUserId})
             MATCH (cu:User {user_id: $collectionUserId})
+            MATCH (tu:User {user_id: $travellerId})
             CREATE (iu)-[:INITIALIZE]->(r)
             CREATE (cu)-[:COLLECT]->(r)
+            CREATE (tu)-[:DELIVER]->(r)
             """, node)
-        
+
         for node in product_nodes:
             session.run("""
-            CREATE (p:Product {product_id: $product_id})
+            CREATE (p:Product {product_id: $product_id, product_weight_g: $product_weight_g, product_category_name_english: $product_category_name_english, product_name: $product_name})
             WITH p
             MATCH (r:Request {productId: $product_id})
             CREATE (r)-[:CONTAIN]->(p)
