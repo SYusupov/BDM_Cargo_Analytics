@@ -8,4 +8,6 @@ WHERE iu.city = t.departureAirportFsCode AND
       NOT (r)<-[:DELIVER]-() AND
       t.departureTime >= r.requestDate AND 
       t.departureTime <= r.dateToDeliver
-RETURN t, COLLECT(r) AS requests
+WITH t, r, p
+ORDER BY p.product_weight_g DESC
+RETURN t, COLLECT(r)[0..5] AS top_requests
