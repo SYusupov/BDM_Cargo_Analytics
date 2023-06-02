@@ -2,14 +2,14 @@
 
 DROP TABLE IF EXISTS flights;
 CREATE TABLE flights (
-    flightNumber BIGINT,
+    flightNumber TEXT,
     departureAirportFsCode TEXT,
     arrivalAirportFsCode TEXT,
-    departureTime TEXT,
-    arrivalTime TEXT,
+    departureTime TIMESTAMP,
+    arrivalTime TIMESTAMP,
     stops BIGINT,
-    departureTerminal DOUBLE PRECISION,
-    arrivalTerminal DOUBLE PRECISION
+    departureTerminal INT,
+    arrivalTerminal INT
 );
 
 DROP TABLE IF EXISTS products;
@@ -24,22 +24,21 @@ CREATE TABLE products (
 --     product_image_link TEXT
 );
 
-DROP TABLE IF EXISTS addresses;
-CREATE TABLE addresses (
-    id SERIAL PRIMARY KEY,
-    streetName TEXT,
-    streetNumber INT,
-    buildingNumber TEXT,
-    city TEXT,
-    postalCode INT,
-    province TEXT,
-    country TEXT,
-    address_id INT UNIQUE
-);
+-- DROP TABLE IF EXISTS addresses;
+-- CREATE TABLE addresses (
+--     id SERIAL PRIMARY KEY,
+--     streetName TEXT,
+--     streetNumber INT,
+--     buildingNumber TEXT,
+--     city TEXT,
+--     postalCode INT,
+--     province TEXT,
+--     country TEXT,
+--     address_id INT UNIQUE
+-- );
 
 DROP TABLE IF EXISTS cities_distances;
 CREATE TABLE cities_distances (
-    "Unnamed: 0" BIGINT,
     country1 TEXT,
     name1 TEXT,
     country2 TEXT,
@@ -56,14 +55,13 @@ DROP TABLE IF EXISTS requests;
 CREATE TABLE requests (
     initializationUserId BIGINT,
     collectionUserId BIGINT,
-    travellerId DOUBLE PRECISION,
+    travellerId INT,
     productId TEXT,
-    dateToDeliver TEXT,
-    dateDelivered TEXT,
-    requestDate TEXT,
+    dateToDeliver TIMESTAMP,
+    dateDelivered TIMESTAMP,
+    requestDate TIMESTAMP,
     pickUpAddress BIGINT,
     collectionAddress BIGINT,
-    description DOUBLE PRECISION,
     deliveryFee DOUBLE PRECISION
 );
 
@@ -72,8 +70,8 @@ CREATE TABLE travels (
     userId BIGINT,
     departureAirportFsCode TEXT,
     arrivalAirportFsCode TEXT,
-    departureTime TEXT,
-    arrivalTime TEXT,
+    departureTime TIMESTAMP,
+    arrivalTime TIMESTAMP,
     extraLuggage BIGINT
 );
 
@@ -85,9 +83,9 @@ CREATE TABLE users (
     gender TEXT,
     nationality TEXT,
 --     mobile VARCHAR(50),
-    dob TEXT,
+    dob DATE,
     is_traveller BOOLEAN,
-    address INT,
+    address BIGINT,
     city TEXT
 );
 
