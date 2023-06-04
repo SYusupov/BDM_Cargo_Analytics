@@ -21,21 +21,7 @@ CREATE TABLE products (
     product_width_cm DOUBLE PRECISION,
     product_category_name_english TEXT,
     product_name TEXT
---     product_image_link TEXT
 );
-
--- DROP TABLE IF EXISTS addresses;
--- CREATE TABLE addresses (
---     id SERIAL PRIMARY KEY,
---     streetName TEXT,
---     streetNumber INT,
---     buildingNumber TEXT,
---     city TEXT,
---     postalCode INT,
---     province TEXT,
---     country TEXT,
---     address_id INT UNIQUE
--- );
 
 DROP TABLE IF EXISTS cities_distances;
 CREATE TABLE cities_distances (
@@ -80,31 +66,10 @@ CREATE TABLE travels (
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     user_id BIGINT UNIQUE,
-    -- firstname TEXT,
-    -- lastname TEXT,
     gender TEXT,
     nationality TEXT,
---     mobile VARCHAR(50),
     dob DATE,
     is_traveller BOOLEAN,
     address BIGINT,
     city TEXT
 );
-
--- DROP TABLE IF EXISTS dhl_price;
--- CREATE TABLE dhl_price (
---     Weight BIGINT,
---     A DOUBLE PRECISION,
---     B DOUBLE PRECISION,
---     C DOUBLE PRECISION,
---     D DOUBLE PRECISION
--- );
-
--- DROP TABLE IF EXISTS dhl_zone;
--- CREATE TABLE dhl_zone (
---     Region_start TEXT,
---     Zone_start BIGINT,
---     Region_end TEXT,
---     Zone_end BIGINT,
---     Type TEXT
--- );
