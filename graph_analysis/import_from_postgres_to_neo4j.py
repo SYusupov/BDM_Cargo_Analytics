@@ -31,8 +31,8 @@ def fetch_data_from_postgres(conn):
 
 def transform_data(users, travels, requests, products):
     user_nodes = [{'user_id': row[0], 'is_traveller': row[1], 'city': row[2]} for row in users]
-    travel_nodes = [{'userId': row[0], 'departureAirportFsCode': row[1], 'arrivalAirportFsCode': row[2], 'departureTime': datetime.strptime(row[3], '%Y-%m-%d %H:%M:%S'), 'arrivalTime': datetime.strptime(row[4], '%Y-%m-%d %H:%M:%S'), 'extraLuggage': row[5]} for row in travels]
-    request_nodes = [{'initializationUserId': row[0], 'collectionUserId': row[1], 'travellerId': row[2], 'productId': row[3], 'dateToDeliver': datetime.strptime(row[4], '%m/%d/%Y %I:%M %p'), 'dateDelivered': None if row[5] is None else datetime.strptime(row[5], '%m/%d/%Y %I:%M %p'), 'requestDate': datetime.strptime(row[6], '%m/%d/%Y %I:%M %p')} for row in requests]
+    travel_nodes = [{'userId': row[0], 'departureAirportFsCode': row[1], 'arrivalAirportFsCode': row[2], 'departureTime': row[3], 'arrivalTime': row[4], 'extraLuggage': row[5]} for row in travels]
+    request_nodes = [{'initializationUserId': row[0], 'collectionUserId': row[1], 'travellerId': row[2], 'productId': row[3], 'dateToDeliver': row[4], 'dateDelivered': row[5], 'requestDate': row[6]} for row in requests]
     product_nodes = [{'product_id': row[0], 'product_weight_g': row[1], 'product_category_name_english': row[2], 'product_name': row[3]} for row in products]
 
     return user_nodes, travel_nodes, request_nodes, product_nodes
@@ -49,7 +49,7 @@ def import_data_to_neo4j(driver, user_nodes, travel_nodes, request_nodes, produc
 
         for node in travel_nodes:
             session.run("""
-            CREATE (t:Travel {departureAirportFsCode: $departureAirportFsCode, arrivalAirportFsCode: $arrivalAirportFsCode, departureTime: $departureTime, arrivalTime: $arrivalTime, extraLuggage: $extraLuggage})
+            CREATE (t:Travel {departureAirportFsCode: $departureAirportFsCode, arrivalAirportFsCode: $arrivalAirportFsCode, departureTime: datetime($departureTime), arrivalTime: datetime($arrivalTime), extraLuggage: $extraLuggage})
             WITH t
             MATCH (u:User {user_id: $userId})
             CREATE (u)-[:MAKES]->(t)
@@ -57,7 +57,7 @@ def import_data_to_neo4j(driver, user_nodes, travel_nodes, request_nodes, produc
         
         for node in request_nodes:
             session.run("""
-            CREATE (r:Request {initializationUserId: $initializationUserId, collectionUserId: $collectionUserId, travellerId: $travellerId, productId: $productId, dateToDeliver: $dateToDeliver, dateDelivered: $dateDelivered, requestDate: $requestDate})
+            CREATE (r:Request {initializationUserId: $initializationUserId, collectionUserId: $collectionUserId, travellerId: $travellerId, productId: $productId, dateToDeliver: datetime($dateToDeliver), dateDelivered: datetime($dateDelivered), requestDate: datetime($requestDate)})
             WITH r
             MATCH (iu:User {user_id: $initializationUserId})
             MATCH (cu:User {user_id: $collectionUserId})
