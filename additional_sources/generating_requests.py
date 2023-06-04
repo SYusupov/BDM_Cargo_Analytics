@@ -91,13 +91,12 @@ def generate_requests(products_csv, users_csv, nToGen, start_date, end_date, not
     requests['pickUpAddress'] = initUser
     requests['collectionAddress'] = collectUser
     requests['description'] = ''
+    requests['Satisfactory'] = np.nan
     
     if notFulfilled:
         requests['deliveryFee'] = np.nan
-        requests['Satisfactory'] = np.nan
     else:
         requests['dateDelivered'] = dateDelivered
-        requests["Satisfactory"] = np.random.choice([True,False],size = requests.shape[0],p = [0.9,0.1])
 
         # TODO: add formula for deliveryFee price
         requests['deliveryFee'] = 0

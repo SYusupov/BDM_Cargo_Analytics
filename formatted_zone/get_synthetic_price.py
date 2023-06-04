@@ -65,11 +65,13 @@ def estimate_delivery_fee(requests):
         0.0005 * np.round(requests["product_weight_g"],decimals=3) + \
         0.001 * (np.round(requests["product_length_cm"],decimals=3) + \
                 np.round(requests["product_height_cm"],decimals=3) +
-                np.round(products["product_width_cm"],decimals=3)) + \
+                np.round(requests["product_width_cm"],decimals=3)) + \
         0.1 * np.round(requests["dhl_fee"],decimals=3)
 
-new_requests["deliveryFee"] = estimate_delivery_fee(new_requests)
+new_requests.loc[new_requests['dateDelivered'].notnull(), "deliveryFee"] = estimate_delivery_fee(new_requests.loc[new_requests['dateDelivered'].notnull()])
 
+n_rows = new_requests.loc[new_requests['dateDelivered'].notnull()].shape[0]
+new_requests.loc[new_requests['dateDelivered'].notnull(), "Satisfactory"] = np.random.choice(['t', 'f'],size = n_rows,p = [0.9,0.1])
 
 new_requests = new_requests.drop(
     ["startCity", "endCity", "Distance", "lpg_price", "diesel_price", "gasoline_price", 
