@@ -9,7 +9,7 @@ from itertools import combinations
 
 df = pd.read_csv("cities.csv")
 
-target_cities = [0, 1, 3, 58, 24]
+target_cities = [0, 1, 3, 46, 58, 24]
 cities_combs = list(combinations(target_cities, 2))
 
 city_pairs_df = pd.DataFrame(columns=['country1', 'latitude1', 'longitude1', 'name1', 'country2', 'latitude2', 'longitude2', 'name2', 'distance_km'])

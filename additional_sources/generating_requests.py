@@ -31,12 +31,13 @@ def generate_requests(products_csv, users_csv, nToGen, start_date, end_date, not
     """
     products = pd.read_csv(products_csv)
     users = pd.read_csv(users_csv)
+    # distances = pd.read_csv(distances_csv)
 
     product_ids = products['product_id'].values
 
     requests = pd.DataFrame(columns=[
-        'initializationUserId', 'collectionUserId', 'travellerId', 'productId', 'dateToDeliver', 'dateDelivered', 
-        'requestDate', 'pickUpAddress', 'collectionAddress', 'description', 'deliveryFee'])
+        'requestId','initializationUserId', 'collectionUserId', 'travellerId', 'productId', 'dateToDeliver', 
+        'dateDelivered', 'requestDate', 'pickUpAddress', 'collectionAddress', 'description', 'deliveryFee'])
 
     initUser = []
     collectUser = []
@@ -45,6 +46,12 @@ def generate_requests(products_csv, users_csv, nToGen, start_date, end_date, not
     dateToDeliver = []
     dateDelivered = []
     requestDate = []
+
+    # 159*random(0.02,0.025)+0.6*random(2,2.5)
+    # distanceFactor = 0.02
+    # distanceFactor_diff = 0.005
+    # weightFactor = 2
+    # weightFacotor_diff = 0.5
 
     for _ in range(nToGen):
         initUser.append(random.randrange(20,40))
@@ -87,8 +94,10 @@ def generate_requests(products_csv, users_csv, nToGen, start_date, end_date, not
     
     if notFulfilled:
         requests['deliveryFee'] = np.nan
+        requests['Satisfactory'] = np.nan
     else:
         requests['dateDelivered'] = dateDelivered
+        requests["Satisfactory"] = np.random.choice([True,False],size = requests.shape[0],p = [0.9,0.1])
 
         # TODO: add formula for deliveryFee price
         requests['deliveryFee'] = 0
@@ -108,5 +117,6 @@ if __name__ == "__main__":
     requests2 = generate_requests(products_csv, users_csv, 20, start_date, end_date, True)
 
     requests1 = pd.concat([requests1, requests2])
+    requests1['requestId'] = list(range(requests1.shape[0]))
 
     requests1.to_csv('requests.csv', index=False)

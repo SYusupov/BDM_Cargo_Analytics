@@ -62,7 +62,9 @@ CREATE TABLE requests (
     requestDate TIMESTAMP,
     pickUpAddress BIGINT,
     collectionAddress BIGINT,
-    deliveryFee DOUBLE PRECISION
+    deliveryFee DOUBLE PRECISION,
+    requestId INT,
+    Satisfactory BOOLEAN
 );
 
 DROP TABLE IF EXISTS travels;
@@ -89,20 +91,20 @@ CREATE TABLE users (
     city TEXT
 );
 
-DROP TABLE IF EXISTS dhl_price;
-CREATE TABLE dhl_price (
-    Weight BIGINT,
-    A DOUBLE PRECISION,
-    B DOUBLE PRECISION,
-    C DOUBLE PRECISION,
-    D DOUBLE PRECISION
-);
+-- DROP TABLE IF EXISTS dhl_price;
+-- CREATE TABLE dhl_price (
+--     Weight BIGINT,
+--     A DOUBLE PRECISION,
+--     B DOUBLE PRECISION,
+--     C DOUBLE PRECISION,
+--     D DOUBLE PRECISION
+-- );
 
-DROP TABLE IF EXISTS dhl_zone;
-CREATE TABLE dhl_zone (
-    Region_start TEXT,
-    Zone_start BIGINT,
-    Region_end TEXT,
-    Zone_end BIGINT,
-    Type TEXT
-);
+-- DROP TABLE IF EXISTS dhl_zone;
+-- CREATE TABLE dhl_zone (
+--     Region_start TEXT,
+--     Zone_start BIGINT,
+--     Region_end TEXT,
+--     Zone_end BIGINT,
+--     Type TEXT
+-- );

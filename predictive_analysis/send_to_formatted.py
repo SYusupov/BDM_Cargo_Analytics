@@ -6,7 +6,7 @@ from pyspark.sql import Row
 import pyspark.sql.functions as fn
 from pyspark.conf import SparkConf
 from pyspark.sql.types import LongType, StringType, StructField, StructType, BooleanType, ArrayType, IntegerType
-
+from pyspark.sql.window import Window
 
 def write_toPostgres(df, table_name, schema=None):
     if schema == None:
@@ -117,29 +117,50 @@ dhl_zone_new = dhl_zone_new.union(dhl_zone.withColumn("Region_start", fn.when(fn
 dhl_zone = dhl_zone_new.withColumn("Region_end", fn.when(fn.col("Region_end") == "Resto de España (ES)", "Málaga").otherwise(fn.col("Region_end")))
 dhl_zone = dhl_zone.union(dhl_zone_new.withColumn("Region_end", fn.when(fn.col("Region_end") == "Resto de España (ES)", "Barcelona").otherwise(fn.col("Region_end"))))
 dhl_zone = dhl_zone.union(dhl_zone_new.withColumn("Region_end", fn.when(fn.col("Region_end") == "Resto de España (ES)", "Madrid").otherwise(fn.col("Region_end"))))
-write_toPostgres(dhl_zone, "dhl_zone")
-write_toPostgres(dhl_price, "dhl_price")
+# write_toPostgres(dhl_zone, "dhl_zone")
+# write_toPostgres(dhl_price, "dhl_price")
 
-# Adding the cities of the addresse for each request
 requests = sqlContext.read.format("parquet").load("hdfs://localhost:9900/input/requests.parquet", header='true', inferSchema='true')
+
+# Fixing the datatypes
 requests = requests.withColumn('dateToDeliver', fn.to_timestamp(fn.col("dateToDeliver"),"MM/dd/yyyy hh:mm a"))
 requests = requests.withColumn('dateDelivered', fn.to_timestamp(fn.col("dateDelivered"),"MM/dd/yyyy hh:mm a"))
 requests = requests.withColumn('requestDate', fn.to_timestamp(fn.col("requestDate"),"MM/dd/yyyy hh:mm a"))
 requests = requests.withColumn('travellerId', requests.travellerId.cast('int'))
+requests = requests.withColumn('requestId', requests.requestId.cast('int'))
+requests = requests.withColumn('Satisfactory', requests.requestId.cast(BooleanType()))
 
 requests = requests.drop("description")
+
+## Getting the DHL delivery price for each request
+# Adding the cities of the addresse for each request
+requests = requests.join(result, requests.pickUpAddress == result.address).select(requests['*'], result['city'])
+requests = requests.withColumnRenamed("city", 'startCity')
+requests = requests.join(result, requests.collectionAddress == result.address).select(requests['*'], result['city'])
+requests = requests.withColumnRenamed("city", 'endCity')
+
+# Adding the products weights
+requests = requests.join(products, products.product_id == requests.productId).select(requests['*'], products['product_weight_g'])
+
+# Adding the DHL Zone for each request based on Collect and Pickup Cities
+cond = [dhl_zone.Region_start == requests.startCity, dhl_zone.Region_end == requests.endCity]
+requests = requests.join(dhl_zone, cond, "inner").select(requests["*"], dhl_zone["Type"]).distinct()
+
+# creating a column of map type that maps types to corresponding price for a given weight
+c = dhl_price.columns[1:]
+dhl_price_map = dhl_price.select('Weight', fn.map_from_arrays(fn.array(*map(fn.lit, c)), fn.array(*c)).alias('price'))
+
+# approximating weight in kgs
+requests = requests.withColumn("product_weight_kg", fn.expr("ceil(product_weight_g /1000)"))
+
+# join the prices map with requests (creates additional rows for any price that is bigger)
+requests = requests.join(dhl_price_map, on=requests['product_weight_kg'] >= dhl_price_map['Weight'], how='left')
+requests = requests.withColumn('dhl_fee', fn.expr("price[Type]"))
+
+# leaving only those with max weight
+W = Window.partitionBy('requestId').orderBy(fn.desc('Weight'))
+requests = requests.withColumn('rank', fn.dense_rank().over(W)).filter('rank == 1')
+
+requests = requests.drop("price", "rank", "Weight", "product_weight_kg", "Type", "startCity", "endCity", "product_weight_g")
+
 write_toPostgres(requests, "requests")
-
-# requests = requests.join(result, result.address == requests.pickUpAddress)
-# requests = requests.withColumnRenamed("city", 'pickupCity').drop("address")
-# requests = requests.join(result, result.address == requests.collectionAddress)
-# requests = requests.withColumnRenamed("city", 'collectCity')
-
-# # Adding the DHL Zone for each request based on Collect and Pickup Cities
-# requests = requests.join(dhl_zone, (dhl_zone.Region_start == requests.collectCity) & (dhl_zone.Region_end == requests.pickupCity))
-# requests = requests.drop("Region_start", "Region_end", "address")
-
-# # Adding the products weights
-# products = products.drop("product_length_cm", "product_height_cm", "product_width_cm", "product_category_name_english", "product_name")
-# requests = requests.join(products, products.product_id == requests.productId)
-# requests = requests.drop("product_id")
