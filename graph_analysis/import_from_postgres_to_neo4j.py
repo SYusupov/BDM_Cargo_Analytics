@@ -21,7 +21,7 @@ def fetch_data_from_postgres(conn):
     cur.execute("SELECT userId, departureAirportFsCode, arrivalAirportFsCode, departureTime, arrivalTime, extraLuggage FROM travels")
     travels = cur.fetchall()
 
-    cur.execute("SELECT initializationUserId, collectionUserId, travellerId, productId, dateToDeliver, dateDelivered, requestDate FROM requests")
+    cur.execute("SELECT initializationUserId, collectionUserId, travellerId, productId, dateToDeliver, dateDelivered, requestDate, requestid FROM requests")
     requests = cur.fetchall()
 
     cur.execute("SELECT product_id, product_weight_g, product_category_name_english, product_name FROM products")
@@ -32,7 +32,7 @@ def fetch_data_from_postgres(conn):
 def transform_data(users, travels, requests, products):
     user_nodes = [{'user_id': row[0], 'is_traveller': row[1], 'city': row[2]} for row in users]
     travel_nodes = [{'userId': row[0], 'departureAirportFsCode': row[1], 'arrivalAirportFsCode': row[2], 'departureTime': row[3], 'arrivalTime': row[4], 'extraLuggage': row[5]} for row in travels]
-    request_nodes = [{'initializationUserId': row[0], 'collectionUserId': row[1], 'travellerId': row[2], 'productId': row[3], 'dateToDeliver': row[4], 'dateDelivered': row[5], 'requestDate': row[6]} for row in requests]
+    request_nodes = [{'initializationUserId': row[0], 'collectionUserId': row[1], 'travellerId': row[2], 'productId': row[3], 'dateToDeliver': row[4], 'dateDelivered': row[5], 'requestDate': row[6], 'requestid': row[7]} for row in requests]
     product_nodes = [{'product_id': row[0], 'product_weight_g': row[1], 'product_category_name_english': row[2], 'product_name': row[3]} for row in products]
 
     return user_nodes, travel_nodes, request_nodes, product_nodes
@@ -57,7 +57,7 @@ def import_data_to_neo4j(driver, user_nodes, travel_nodes, request_nodes, produc
         
         for node in request_nodes:
             session.run("""
-            CREATE (r:Request {initializationUserId: $initializationUserId, collectionUserId: $collectionUserId, travellerId: $travellerId, productId: $productId, dateToDeliver: datetime($dateToDeliver), dateDelivered: datetime($dateDelivered), requestDate: datetime($requestDate)})
+            CREATE (r:Request {initializationUserId: $initializationUserId, collectionUserId: $collectionUserId, travellerId: $travellerId, productId: $productId, dateToDeliver: datetime($dateToDeliver), dateDelivered: datetime($dateDelivered), requestDate: datetime($requestDate), requestid: $requestid})
             WITH r
             MATCH (iu:User {user_id: $initializationUserId})
             MATCH (cu:User {user_id: $collectionUserId})
