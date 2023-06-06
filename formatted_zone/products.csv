@@ -1,4 +1,4 @@
-﻿product_id,product_weight_g,product_length_cm,product_height_cm,product_width_cm,product_category_name_english,product_name
+product_id,product_weight_g,product_length_cm,product_height_cm,product_width_cm,product_category_name_english,product_name
 1e9e8ef04dbcff4541ed26657ea517e5,225,16,10,14,perfumery,Acqua di Gio by Giorgio Armani
 6a2fb4dd53d2cdb88e0432f1284a004c,400,27,5,20,perfumery,Alien by Thierry Mugler
 0d009643171aee696f4733340bc2fdd0,422,21,16,18,perfumery,Black Opium by Yves Saint Laurent
@@ -19,11 +19,11 @@ c51dc74a8b5018e82e9e44ef4b647227,650,16,10,11,perfumery,Hypnotic Poison by Chris
 c20fbbd4ccf2f7da70e150689a6a905f,455,21,15,17,perfumery,Infusion d'Iris by Prada
 e792f2bb275bdea9b6076c2acbb5abcd,850,16,14,11,perfumery,J'adore by Christian Dior
 2d6676e04aac85ce66dcf8d0529f4012,500,20,12,15,perfumery,Joy by Christian Dior
-da86f2cc2faf840b7b86390726b88905,200,22,3,11,perfumery,La Vie est Belle by Lanc么me
+da86f2cc2faf840b7b86390726b88905,200,22,3,11,perfumery,La Vie est Belle by Lancôme
 99d1f27bf9ea0392ab69d0203c6efdc4,150,16,16,15,perfumery,Light Blue by Dolce & Gabbana
 5773723f7819ffb88c5c758f8f8c183c,700,20,20,20,perfumery,L'Interdit by Givenchy
-a1766f2d27b4e90a0d78d8e115295399,450,16,16,22,perfumery,Love Story by Chlo茅
-1175dc374bce5c9d93c4d4281d8d85d7,400,18,18,18,perfumery,Miracle by Lanc么me
+a1766f2d27b4e90a0d78d8e115295399,450,16,16,22,perfumery,Love Story by Chloé
+1175dc374bce5c9d93c4d4281d8d85d7,400,18,18,18,perfumery,Miracle by Lancôme
 cef67bcfe19066a932b7673e239eb23d,371,26,4,26,baby,Graco Pack 'n Play Playard
 03b63c5fc16691530586ae020c345514,7150,50,19,45,baby,Fisher-Price Infant-to-Toddler Rocker
 8b41fbc2b984a12030090112324d1bc4,500,20,13,13,baby,Baby Einstein 5-in-1 Journey of Discovery Activity Gym
