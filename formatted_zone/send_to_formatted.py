@@ -83,13 +83,13 @@ travels = travels.withColumn("departureAirportFsCode",
                     fn.when(fn.col("departureAirportFsCode") == 'MAD', 'Madrid')
                     .otherwise(fn.when(fn.col("departureAirportFsCode") == 'BCN', 'Barcelona')
                     .otherwise(fn.when(fn.col("departureAirportFsCode") == 'PMI', 'Palma')
-                    .otherwise(fn.when(fn.col("departureAirportFsCode") == 'AGP', 'Málaga')
+                    .otherwise(fn.when(fn.col("departureAirportFsCode") == 'AGP', 'Malaga')
                     .otherwise(fn.col("departureAirportFsCode"))))))
 travels = travels.withColumn("arrivalAirportFsCode",
                     fn.when(fn.col("arrivalAirportFsCode") == 'MAD', 'Madrid')
                     .otherwise(fn.when(fn.col("arrivalAirportFsCode") == 'BCN', 'Barcelona')
                     .otherwise(fn.when(fn.col("arrivalAirportFsCode") == 'PMI', 'Palma')
-                    .otherwise(fn.when(fn.col("arrivalAirportFsCode") == 'AGP', 'Málaga')
+                    .otherwise(fn.when(fn.col("arrivalAirportFsCode") == 'AGP', 'Malaga')
                     .otherwise(fn.col("arrivalAirportFsCode"))))))
 travels = travels.withColumn('departureTime', fn.to_timestamp(fn.col("departureTime"),"yyyy-MM-dd HH:mm:ss"))
 travels = travels.withColumn('arrivalTime', fn.to_timestamp(fn.col("arrivalTime"),"yyyy-MM-dd HH:mm:ss"))
@@ -110,11 +110,11 @@ dhl_zone = dhl_zone.withColumn("Region_start", fn.when(fn.col("Region_start") ==
 dhl_zone = dhl_zone.withColumn("Region_end", fn.when(fn.col("Region_end") == 'Palma De Mallorca (PMI)', 'Palma').otherwise(fn.col("Region_end")))
 
 # Replacing Rest of Spain with our 3 cities
-dhl_zone_new = dhl_zone.withColumn("Region_start", fn.when(fn.col("Region_start") == "Resto de España (ES)", "Málaga").otherwise(fn.col("Region_start")))
+dhl_zone_new = dhl_zone.withColumn("Region_start", fn.when(fn.col("Region_start") == "Resto de España (ES)", "Malaga").otherwise(fn.col("Region_start")))
 dhl_zone_new = dhl_zone_new.union(dhl_zone.withColumn("Region_start", fn.when(fn.col("Region_start") == "Resto de España (ES)", "Barcelona").otherwise(fn.col("Region_start"))))
 dhl_zone_new = dhl_zone_new.union(dhl_zone.withColumn("Region_start", fn.when(fn.col("Region_start") == "Resto de España (ES)", "Madrid").otherwise(fn.col("Region_start"))))
 
-dhl_zone = dhl_zone_new.withColumn("Region_end", fn.when(fn.col("Region_end") == "Resto de España (ES)", "Málaga").otherwise(fn.col("Region_end")))
+dhl_zone = dhl_zone_new.withColumn("Region_end", fn.when(fn.col("Region_end") == "Resto de España (ES)", "Malaga").otherwise(fn.col("Region_end")))
 dhl_zone = dhl_zone.union(dhl_zone_new.withColumn("Region_end", fn.when(fn.col("Region_end") == "Resto de España (ES)", "Barcelona").otherwise(fn.col("Region_end"))))
 dhl_zone = dhl_zone.union(dhl_zone_new.withColumn("Region_end", fn.when(fn.col("Region_end") == "Resto de España (ES)", "Madrid").otherwise(fn.col("Region_end"))))
 # write_toPostgres(dhl_zone, "dhl_zone")
