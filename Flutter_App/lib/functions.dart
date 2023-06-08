@@ -1,4 +1,5 @@
 
+import 'package:decimal/decimal.dart';
 import 'package:test_project/requestmodel.dart';
 
 import 'addressModel.dart';
@@ -13,7 +14,7 @@ class Functions {
       collectionUserId: 'user2',
       travellerId: 'user3',
       productId: 'product1',
-      weight: BigInt.from(10),
+      weight: Decimal.parse("10"),
       dateToDeliver: '2023-05-23',
       pickUpAddress: AddressModel(
           id: '34',
@@ -33,8 +34,7 @@ class Functions {
           provence: 'provence2',
           city: 'City2',
           country: 'Country2'),
-      description: 'Sample request',
-      deliveryFees: BigInt.from(20),
+      deliveryFees: Decimal.parse("20"),
     );
 
     request.sendPostRequest();

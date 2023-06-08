@@ -1,6 +1,7 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:http/http.dart' as http;
-
+import 'package:decimal/decimal.dart';
 import 'addressModel.dart';
 
 class RequestsModel {
@@ -9,12 +10,11 @@ class RequestsModel {
   String collectionUserId;
   String travellerId;
   String productId;
-  BigInt weight;
+  Decimal weight;
   String dateToDeliver;
   AddressModel pickUpAddress;
   AddressModel collectionAddress;
-  String description;
-  BigInt deliveryFees;
+  Decimal deliveryFees;
 
   RequestsModel({
     required this.id,
@@ -26,7 +26,6 @@ class RequestsModel {
     required this.dateToDeliver,
     required this.pickUpAddress,
     required this.collectionAddress,
-    required this.description,
     required this.deliveryFees,
   });
 
@@ -41,7 +40,6 @@ class RequestsModel {
       'dateToDeliver': dateToDeliver,
       'pickUpAddress': pickUpAddress.toJson(),
       'collectionAddress': collectionAddress.toJson(),
-      'description': description,
       'deliveryFees': deliveryFees.toString(),
     };
   }
@@ -51,14 +49,13 @@ class RequestsModel {
       id: json['id'],
       initializationUserId: json['initializationUserId'],
       collectionUserId: json['collectionUserId'],
-      travellerId: json['travellerId'] ?? '',
+      travellerId: '',
       productId: json['productId'],
-      weight: BigInt.from(json['weight']),
+      weight: Decimal.parse(json['weight']),
       dateToDeliver: json['dateToDeliver'],
       pickUpAddress: AddressModel.fromJson(json['pickUpAddress']),
       collectionAddress: AddressModel.fromJson(json['collectionAddress']),
-      description: json['description'] ?? '',
-      deliveryFees: BigInt.from(json['deliveryFees']),
+      deliveryFees: Decimal.parse(json['deliveryFees'].toString()),
     );
   }
 
@@ -86,6 +83,82 @@ class RequestsModel {
   Future<List<RequestsModel>?> getRequests() async {
     final url = 'http://localhost:9090/requests';
     final headers = {'Content-Type': 'application/json'};
+    List<RequestsModel>? objects;
+    try {
+      final response = await http.get(Uri.parse(url), headers: headers);
+
+      if (response.statusCode == 200) {
+        // Request successful
+        print('Post request sent successfully');
+        final List<dynamic> jsonResponse = json.decode(response.body);
+        objects = jsonResponse.map((data) => RequestsModel.fromJson(data)).toList();
+        return objects;
+      } else {
+        // Request failed
+        print('Failed to send post request. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Exception occurred during the request
+      print('Error sending post request: $error');
+    }
+    return objects ?? [];
+  }
+
+  Future<List<RequestsModel>?> getRequestsByUserID(String userID) async {
+    final url = 'http://localhost:9090/requests/by/id';
+    final headers = {'Content-Type': 'application/json'};
+
+    List<RequestsModel>? objects;
+    try {
+      var getURL = Uri.parse('$url?initUserId=$userID');
+      final response = await http.get(getURL, headers: headers);
+
+      if (response.statusCode == 200) {
+        // Request successful
+        print('Post request sent successfully');
+        final List<dynamic> jsonResponse = json.decode(response.body);
+        objects = jsonResponse.map((data) => RequestsModel.fromJson(data)).toList();
+        return objects;
+      } else {
+        // Request failed
+        print('Failed to send post request. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Exception occurred during the request
+      print('Error sending post request: $error');
+    }
+    return objects ?? [];
+  }
+
+  Future<List<RequestsModel>?> getNotSelectedRequests() async {
+    final url = 'http://localhost:9090/requests/not/selected';
+    final headers = {'Content-Type': 'application/json'};
+
+    List<RequestsModel>? objects;
+    try {
+      final response = await http.get(Uri.parse(url), headers: headers);
+
+      if (response.statusCode == 200) {
+        // Request successful
+        print('Post request sent successfully');
+        final List<dynamic> jsonResponse = json.decode(response.body);
+        objects = jsonResponse.map((data) => RequestsModel.fromJson(data)).toList();
+        return objects;
+      } else {
+        // Request failed
+        print('Failed to send post request. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Exception occurred during the request
+      print('Error sending post request: $error');
+    }
+    return objects ?? [];
+  }
+
+  Future<List<RequestsModel>?> getRecommendedRequests() async {
+    final url = 'http://localhost:9090/requests/recommended';
+    final headers = {'Content-Type': 'application/json'};
+
     List<RequestsModel>? objects;
     try {
       final response = await http.get(Uri.parse(url), headers: headers);

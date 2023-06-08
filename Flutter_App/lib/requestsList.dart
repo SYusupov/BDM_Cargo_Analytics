@@ -1,3 +1,4 @@
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:test_project/addressModel.dart';
 import 'package:test_project/requestmodel.dart';
@@ -47,16 +48,21 @@ class _RequestsListPageState extends State<RequestsListPage> {
         collectionUserId: '',
         travellerId: '',
         productId: '',
-        weight: BigInt.zero,
+        weight: Decimal.parse("0"),
         dateToDeliver: '',
         pickUpAddress: newAddress(),
         collectionAddress: newAddress(),
-        description: '',
-        deliveryFees: BigInt.zero);
-    requestsModel.getRequests().then((List<RequestsModel>? requests) {
+        deliveryFees: Decimal.parse("0"));
+    requestsModel.getNotSelectedRequests().then((List<RequestsModel>? requests) {
       if (requests != null) {
         setState(() {
           requestListAvailable = requests;
+        });
+      }
+    });
+    requestsModel.getRequests().then((List<RequestsModel>? requests) {
+      if (requests != null) {
+        setState(() {
           requestListRecommended = requests;
         });
       }
@@ -109,8 +115,7 @@ class _RequestsListPageState extends State<RequestsListPage> {
                     },
                     child: Card(
                       child: ListTile(
-                        title: Text('${request.productId}\n'
-                            '${request.description}'),
+                        title: Text(request.productId),
                         subtitle: Text('From: ${request.pickUpAddress.city} \n'
                             'to: ${request.collectionAddress.city}\n'
                             'weight: ${request.weight}'),
@@ -174,8 +179,7 @@ class _RequestsListPageState extends State<RequestsListPage> {
                     },
                     child: Card(
                       child: ListTile(
-                        title: Text('${request.productId}\n'
-                            '${request.description}'),
+                        title: Text(request.productId),
                         subtitle: Text('From: ${request.pickUpAddress.city} \n'
                             'to: ${request.collectionAddress.city}\n'
                             'weight: ${request.weight}'),
@@ -237,8 +241,7 @@ class _RequestsListPageState extends State<RequestsListPage> {
                     },
                     child: Card(
                       child: ListTile(
-                        title: Text('${request.productId}\n'
-                            '${request.description}'),
+                        title: Text(request.productId),
                         subtitle: Text('From: ${request.pickUpAddress.city} \n'
                             'to: ${request.collectionAddress.city}\n'
                             'weight: ${request.weight}'),

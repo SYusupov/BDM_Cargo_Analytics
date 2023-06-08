@@ -11,6 +11,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.parquet.avro.AvroParquetWriter;
 import org.apache.parquet.hadoop.ParquetFileWriter;
 import org.apache.parquet.hadoop.ParquetWriter;
+import org.neo4j.driver.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.query.Param;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.*;
 
 @RestController
@@ -68,29 +69,81 @@ public class RequestsController {
     }
 
     @GetMapping("/by/id")
-    public ResponseEntity<List<RequestsModel>> getRequestsById(@Param("id") Long initUserId) {
+    public ResponseEntity<List<RequestsModel>> getRequestsById(@Param("initUserId") String initUserId) {
         List<RequestsModel> requestsModelList = new ArrayList<>();
-        for (Requests request : requestsDao.getAllByInitializationuserid(initUserId))
+        for (Requests request : requestsDao.getAllByInitializationUserIdAndTravellerIdIsNull(Long.valueOf(initUserId)))
             requestsModelList.add(requestsToRequestsModel(request));
         return ResponseEntity.ok(requestsModelList);
     }
 
-    private RequestsModel requestsToRequestsModel(Requests request) {
-        return new RequestsModel(request.getId().toString(),
-                request.getInitializationuserid().toString(),
-                request.getCollectionuserid().toString(),
-                request.getTravellerid().toString(),
-                request.getProductid(),
-        BigInteger.ZERO,
-        request.getDatetodeliver(),
-        getAddress(request.getPickupaddress()),
-                getAddress(request.getCollectionaddress()),
-        request.getDescription().toString(),
-        new BigInteger(String.valueOf(request.getDeliveryfee())));
+    @GetMapping("/not/selected")
+    public ResponseEntity<List<RequestsModel>> getNotSelectedRequests() {
+        List<RequestsModel> requestsModelList = new ArrayList<>();
+        for (Requests request : requestsDao.getAllByTravellerIdIsNull())
+            requestsModelList.add(requestsToRequestsModel(request));
+        return ResponseEntity.ok(requestsModelList);
     }
 
-    private AddressModel getAddress(Long id) {
-        return new AddressModel(String.valueOf(id), "Spain", offices[Math.toIntExact(id)], "12435", "testST.", "11", "33", "testPR.");
+    @GetMapping("/recommended")
+    public ResponseEntity<List<RequestsModel>> getRecommendedRequests() {
+        List<RequestsModel> requestsModelList = new ArrayList<>();
+        Driver driver = GraphDatabase.driver("bolt://localhost:7687", AuthTokens.basic("neo4j", "password"));
+        Session session = driver.session();
+        String cypherQuery = "MATCH (t:Travel)<-[:MAKES]-(u:User), \n" +
+                "      (r:Request)-[:CONTAIN]->(p:Product), \n" +
+                "      (iu:User)-[:INITIALIZE]->(r),\n" +
+                "      (cu:User)-[:COLLECT]->(r),\n" +
+                "      (u)-[:DELIVER]->(hr:Request)-[:CONTAIN]->(hp:Product)\n" +
+                "WHERE iu.city = t.departureAirportFsCode AND \n" +
+                "      cu.city = t.arrivalAirportFsCode AND\n" +
+                "      p.product_weight_g <= t.extraLuggage * 1000 AND \n" +
+                "      // NOT (r)<-[:DELIVER]-() AND\n" +
+                "      t.departureTime >= r.requestDate AND \n" +
+                "      t.departureTime <= r.dateToDeliver \n" +
+                "WITH t, r, p, u,\n" +
+                "     COLLECT(hp.product_category_name_english) AS delivered_categories \n" +
+                "WITH t, r, p, \n" +
+                "     SIZE(delivered_categories) AS total_delivered_categories, \n" +
+                "     SIZE([x IN delivered_categories WHERE x = p.product_category_name_english]) AS matching_categories \n" +
+                "WITH t, r, \n" +
+                "     toFloat(matching_categories) / total_delivered_categories AS similarity \n" +
+                "ORDER BY similarity DESC, p.product_weight_g DESC \n" +
+                "RETURN t, COLLECT({request: r, similarity: similarity})[0..5] AS top_requests";
+        try (Transaction tx = session.beginTransaction()) {
+            Result result = tx.run(cypherQuery);
+            while (result.hasNext()) {
+                Record record = result.next();
+                int requestId = record.get("top_requests").get(0).get("request").get("requestid").asInt();
+                int initializationUserId = record.get("top_requests").get(0).get("request").get("initializationUserId").asInt();
+                int collectionUserId = record.get("top_requests").get(0).get("request").get("collectionUserId").asInt();
+                String productId = record.get("top_requests").get(0).get("request").get("productId").asString();
+                String dateToDeliver = record.get("top_requests").get(0).get("request").get("dateToDeliver").toString();
+                requestsModelList.add(new RequestsModel(String.valueOf(requestId), String.valueOf(initializationUserId),
+                        String.valueOf(collectionUserId), null, productId,
+                        "0", dateToDeliver, getAddress2(1), getAddress2(2), BigDecimal.TEN));
+
+            }
+        }
+        session.close();
+        driver.close();
+        return ResponseEntity.ok(requestsModelList);
+    }
+
+    private RequestsModel requestsToRequestsModel(Requests request) {
+        return new RequestsModel(request.getRequestId().toString(),
+                request.getInitializationUserId().toString(),
+                request.getCollectionUserId().toString(),
+                null,
+                request.getProductId(),
+                "0",
+        request.getDateToDeliver(),
+        getAddress2(1),
+                getAddress2(2),
+                BigDecimal.valueOf(request.getDeliveryFee() != null ? request.getDeliveryFee() : 0.0));
+    }
+
+    private AddressModel getAddress2(int id) {
+        return new AddressModel(String.valueOf(id), "Spain", offices[id], "12435", "testST.", "11", "33", "testPR.");
     }
 
     @GetMapping
@@ -108,12 +161,11 @@ public class RequestsController {
         requestsModel.setCollectionUserId(ids[random.nextInt(5)] + 1);
         requestsModel.setTravellerId(ids[random.nextInt(5)] + 2);
         requestsModel.setProductId("888777");
-        requestsModel.setWeight(BigInteger.ONE);
-        requestsModel.setDeliveryFees(BigInteger.TEN);
+        requestsModel.setWeight("1");
+        requestsModel.setDeliveryFees(BigDecimal.TEN);
         requestsModel.setDateToDeliver("25-07-2023");
         requestsModel.setCollectionAddress(getAddress());
         requestsModel.setPickUpAddress(getAddress());
-        requestsModel.setDescription("test request num " + i);
         return requestsModel;
     }
 

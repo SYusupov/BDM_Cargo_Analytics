@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 @Data
@@ -16,11 +17,10 @@ public class RequestsModel {
     String collectionUserId;
     String travellerId;
     String productId;
-    BigInteger weight;
+    String weight;
     String dateToDeliver;
     AddressModel pickUpAddress;
     AddressModel collectionAddress;
-    String description;
-    BigInteger deliveryFees;
+    BigDecimal deliveryFees;
 
 }

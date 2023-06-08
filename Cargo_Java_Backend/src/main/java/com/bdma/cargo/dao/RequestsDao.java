@@ -9,5 +9,8 @@ import java.util.List;
 @Repository
 public interface RequestsDao extends CrudRepository<Requests, Long> {
 
-    List<Requests> getAllByInitializationuserid(Long id);
+    List<Requests> getAllByInitializationUserIdAndTravellerIdIsNull(Long id);
+
+    List<Requests> getAllByTravellerIdIsNull();
+
 }
