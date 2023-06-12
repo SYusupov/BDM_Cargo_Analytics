@@ -55,25 +55,24 @@ def import_data_to_neo4j(driver, user_nodes, travel_nodes, request_nodes, produc
             CREATE (u)-[:MAKES]->(t)
             """, node)
         
+        for node in product_nodes:
+            session.run("""
+            CREATE (p:Product {product_id: $product_id, product_weight_g: $product_weight_g, product_category_name_english: $product_category_name_english, product_name: $product_name})
+            """, node)
+
         for node in request_nodes:
             session.run("""
-            CREATE (r:Request {initializationUserId: $initializationUserId, collectionUserId: $collectionUserId, travellerId: $travellerId, productId: $productId, dateToDeliver: datetime($dateToDeliver), dateDelivered: datetime($dateDelivered), requestDate: datetime($requestDate), requestid: $requestid})
+            CREATE (r:Request {dateToDeliver: datetime($dateToDeliver), requestid: $requestid})
             WITH r
             MATCH (iu:User {user_id: $initializationUserId})
             MATCH (cu:User {user_id: $collectionUserId})
             MATCH (tu:User {user_id: $travellerId})
-            CREATE (iu)-[:INITIALIZE]->(r)
+            MATCH (p:Product {product_id: $productId})
+            CREATE (iu)-[:INITIALIZE {date: datetime($requestDate)}]->(r)
             CREATE (cu)-[:COLLECT]->(r)
-            CREATE (tu)-[:DELIVER]->(r)
-            """, node)
-
-        for node in product_nodes:
-            session.run("""
-            CREATE (p:Product {product_id: $product_id, product_weight_g: $product_weight_g, product_category_name_english: $product_category_name_english, product_name: $product_name})
-            WITH p
-            MATCH (r:Request {productId: $product_id})
+            CREATE (tu)-[:DELIVER {date: datetime($dateDelivered)}]->(r)
             CREATE (r)-[:CONTAIN]->(p)
-            """, node)
+            """, node)   
 
 def main():
     conn = connect_postgres()
