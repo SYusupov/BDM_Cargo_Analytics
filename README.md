@@ -29,3 +29,10 @@ Files for loading the data to Neo4J and to perform Graph Analysis.
 
 ### Predictive Analysis
 Required code to perform delivery price estimation in Apache MLLib
+
+##In Order to run the Demo, you must 
+### 1- Run Postgres
+### 2- Run Neo4J
+### 3- Run Java project in Cargo_Java_Backend folder
+### 4- Run MLPrediction Python project in app folder in Predictive Analysis folder 
+### 5- Run Flutter project in Flutter_App folder
