@@ -99,8 +99,7 @@ class _UserHomePageState extends State<UserHomePage> {
                       child: ListTile(
                         title: Text(request.productId),
                         subtitle: Text('From: ${request.pickUpAddress.city} \n'
-                            'to: ${request.collectionAddress.city}\n'
-                            'weight: ${request.weight}'),
+                            'to: ${request.collectionAddress.city}'),
                       ),
                     ),
                   ),

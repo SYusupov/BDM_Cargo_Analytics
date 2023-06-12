@@ -60,7 +60,7 @@ class _RequestsListPageState extends State<RequestsListPage> {
         });
       }
     });
-    requestsModel.getRequests().then((List<RequestsModel>? requests) {
+    requestsModel.getRecommendedRequests().then((List<RequestsModel>? requests) {
       if (requests != null) {
         setState(() {
           requestListRecommended = requests;
@@ -181,8 +181,7 @@ class _RequestsListPageState extends State<RequestsListPage> {
                       child: ListTile(
                         title: Text(request.productId),
                         subtitle: Text('From: ${request.pickUpAddress.city} \n'
-                            'to: ${request.collectionAddress.city}\n'
-                            'weight: ${request.weight}'),
+                            'to: ${request.collectionAddress.city}'),
                       ),
                     ),
                   ),
@@ -243,8 +242,7 @@ class _RequestsListPageState extends State<RequestsListPage> {
                       child: ListTile(
                         title: Text(request.productId),
                         subtitle: Text('From: ${request.pickUpAddress.city} \n'
-                            'to: ${request.collectionAddress.city}\n'
-                            'weight: ${request.weight}'),
+                            'to: ${request.collectionAddress.city}'),
                       ),
                     ),
                   ),

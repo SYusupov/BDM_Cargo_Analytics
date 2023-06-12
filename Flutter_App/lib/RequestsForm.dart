@@ -1,9 +1,8 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:test_project/requestsList.dart';
-
 import 'City.dart';
 import 'Product.dart';
 import 'addressModel.dart';
@@ -14,11 +13,12 @@ class RequestFormPage extends StatefulWidget {
 }
 
 class _RequestFormPageState extends State<RequestFormPage> {
+  bool isVisible = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late String initializationUserId = "1";
   late String collectionUserId;
   late String productId;
-  late BigInt weight;
+  late int weight;
   late String dateToDeliver;
   late AddressModel pickUpAddress = AddressModel(
       id: null,
@@ -39,7 +39,9 @@ class _RequestFormPageState extends State<RequestFormPage> {
       buildingNumber: '55',
       provence: 'testPR.');
   late String description;
-  late BigInt deliveryFees;
+  double deliveryFees = 0.0;
+  List<int> distances = [500, 600, 750];
+  Random random = Random();
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +74,7 @@ class _RequestFormPageState extends State<RequestFormPage> {
                 onChanged: (value) {
                   setState(() {
                     productId = value!.id;
+                    weight = value.weight;
                   });
                 },
                 items: productList.map((Product product) {
@@ -83,19 +86,6 @@ class _RequestFormPageState extends State<RequestFormPage> {
                 decoration: InputDecoration(
                   labelText: 'Select a product',
                 ),
-              ),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'Weight in Grams'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter weight in grams';
-                  }
-                  return "0";
-                },
-                onSaved: (value) {
-                  weight = BigInt.parse(value!);
-                },
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Description'),
@@ -114,6 +104,7 @@ class _RequestFormPageState extends State<RequestFormPage> {
                   setState(() {
                     pickUpAddress.id = value!.id;
                     pickUpAddress.city = value.name;
+
                   });
                 },
                 items: citiesList.map((City city) {
@@ -161,40 +152,58 @@ class _RequestFormPageState extends State<RequestFormPage> {
                   dateToDeliver = value!;
                 },
                 decoration: InputDecoration(
-                  labelText: 'Date of Birth (DD/MM/YYYY)',
+                  labelText: 'Date To Be Delivered (DD/MM/YYYY)',
                 ),
               ),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'Fees in Euro'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter fees in euro';
-                  }
-                  return "0";
-                },
-                onSaved: (value) {
-                  deliveryFees = BigInt.parse(value!);
-                },
-              ),
-              // Add more form fields for the remaining fields
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    // Call a function to submit the form data
-                    printForm();
-                    sendPostRequest();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RequestsListPage(),
-                      ),
-                    );
-                  }
+                  setState(() {
+                    // if (_formKey.currentState!.validate()) {
+                    //   _formKey.currentState!.save();
+                      // Call a function to submit the form data
+                      sendGetPrediction();
+                    // }
+                  });
                 },
-                child: Text('Submit'),
+                child: Text('Calculate'),
+              ),
+              Visibility(
+                visible: isVisible,
+                child: Center(
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            labelText: 'Fees in Euro'
+                        ),
+                        initialValue: '$deliveryFees',
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter fees in euro';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          deliveryFees = double.parse(value!);
+                        },
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            // Call a function to submit the form data
+                            printForm();
+                            sendPostRequest();
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: Text('Submit'),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
@@ -238,6 +247,41 @@ class _RequestFormPageState extends State<RequestFormPage> {
       // Exception occurred during the request
       print('Error sending post request: $error');
     }
+  }
+
+  Map<String, dynamic> toPredictionJson() {
+    return {
+      'features': [pickUpAddress.city != collectionAddress.city ? distances[random.nextInt(2)] : 0,
+        42.8572, 42.3948, 56.2964, weight, 27.0, 19.0, 20.0, 17.05]
+    };
+  }
+
+  Future<void> sendGetPrediction() async {
+    final url = 'http://127.0.0.1:5000/predict';
+    final headers = {'Content-Type': 'application/json'};
+    final body = json.encode(toPredictionJson());
+
+    try {
+      final response = await http.post(Uri.parse(url), headers: headers, body: body);
+
+      if (response.statusCode == 200) {
+        // Request successful
+        print('Post request sent successfully');
+        var responseBody = json.decode(response.body);
+        deliveryFees = responseBody['prediction'];
+        print(deliveryFees);
+        setState(() {
+          isVisible = true;
+        });
+      } else {
+        // Request failed
+        print('Failed to send post request. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Exception occurred during the request
+      print('Error sending post request: $error');
+    }
+
   }
 
   void printForm() {
