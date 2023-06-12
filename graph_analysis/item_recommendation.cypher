@@ -1,13 +1,13 @@
 MATCH (t:Travel)<-[:MAKES]-(u:User), 
       (r:Request)-[:CONTAIN]->(p:Product), 
-      (iu:User)-[:INITIALIZE]->(r),
+      (iu:User)-[INI:INITIALIZE]->(r),
       (cu:User)-[:COLLECT]->(r),
       (u)-[:DELIVER]->(hr:Request)-[:CONTAIN]->(hp:Product)
 WHERE iu.city = t.departureAirportFsCode AND 
       cu.city = t.arrivalAirportFsCode AND
       p.product_weight_g <= t.extraLuggage * 1000 AND 
       NOT (r)<-[:DELIVER]-() AND
-      t.departureTime >= r.requestDate AND 
+      t.departureTime >= INI.date AND 
       t.departureTime <= r.dateToDeliver
 WITH t, r, p,
      COLLECT(hp.product_category_name_english) AS delivered_categories
